@@ -112,7 +112,7 @@ public class ParseFilesOperation: BasicOperation {
       let file = try sourcePath.path.getFile()
       
       let structure = try Structure(file: file)
-      let (imports, compilationDirectives) = shouldMock ? file.parse() : ([], [])
+      let (imports, compilationDirectives) = file.parse()
       let parsedFile = ParsedFile(file: file,
                                   path: sourcePath.path,
                                   moduleName: sourcePath.moduleName,
