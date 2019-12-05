@@ -1,0 +1,45 @@
+name: MyProject
+options:
+  bundleIdPrefix: com.myapp
+targets:
+  MyApp:
+    type: application
+    platform: iOS
+    sources: 
+      - path: MyApp
+    info:
+      path:
+        MyApp/Info.plist
+    dependencies:
+      - target: MyFramework
+      - target: MyFramework2
+      - target: MyFramework3
+
+  MyFramework2:
+    type: framework
+    platform: iOS
+    sources: 
+      - path: MyFramework2
+    info:
+      path:
+        FW-Info.plist
+    dependencies:
+      - target: MyFramework
+
+  MyFramework3:
+    type: framework
+    platform: iOS
+    sources: 
+      - path: MyFramework3
+    info:
+      path:
+        FW-Info.plist
+
+  MyFramework:
+    type: framework
+    platform: iOS
+    sources: 
+      - path: MyFramework
+    info:
+      path:
+        FW-Info.plist
