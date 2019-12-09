@@ -60,7 +60,8 @@ class MockableType: Hashable, Comparable {
     guard let baseRawType = rawTypes.findBaseRawType(),
       baseRawType.kind.isMockable,
       let accessLevel = AccessLevel(from: baseRawType.dictionary),
-      accessLevel.isMockableType(withinSameModule: baseRawType.parsedFile.shouldMock)
+      accessLevel.isMockableType(withinSameModule: baseRawType.parsedFile.shouldMock),
+      baseRawType.hasMockableComment()
       else { return nil }
     // Handle empty types (declared without any members).
     let substructure = baseRawType.dictionary[SwiftDocKey.substructure.rawValue]
@@ -335,4 +336,17 @@ class MockableType: Hashable, Comparable {
       }
       return (inheritedTypes, allInheritedTypes, allInheritedTypeNames, subclassesExternalType)
   }
+}
+
+private extension RawType {
+	func hasMockableComment() -> Bool {
+		guard let offset = dictionary[SwiftDocKey.nameOffset.rawValue] as? Int64,
+			let fileData = parsedFile.file.contents.data(using: .utf8),
+			let contentBeforeNameDefinition = String(data: fileData[..<offset], encoding: .utf8)else {
+				return false
+		}
+		let lines = contentBeforeNameDefinition.split(separator: "\n")
+		let previousLineIdx = lines.endIndex - 2
+		return previousLineIdx >= lines.startIndex && lines[previousLineIdx] == "/// @mockable"
+	}
 }
