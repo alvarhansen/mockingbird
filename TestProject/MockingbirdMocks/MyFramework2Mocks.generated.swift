@@ -30,8 +30,6 @@ public final class ViewModelView2Mock: MyFramework2.ViewModelView2, Mockingbird.
     }
   }
 
-  public enum InitializerProxy {}
-
   // MARK: Mocked image
 
   public var `image`: UIImage {
@@ -47,26 +45,13 @@ public final class ViewModelView2Mock: MyFramework2.ViewModelView2, Mockingbird.
     return Mockingbird.Mockable<Mockingbird.VariableDeclaration, () -> UIImage, UIImage>(mock: self, invocation: invocation)
   }
 
-  // MARK: Mocked `myFunc`()
-
-  public func `myFunc`() -> Void {
-    let invocation: Mockingbird.Invocation = Mockingbird.Invocation(selectorName: "`myFunc`() -> Void", arguments: [])
-    mockingContext.didInvoke(invocation)
-    let implementation = stubbingContext.implementation(for: invocation, optional: true)
-    if let concreteImplementation = implementation as? () -> Void {
-      concreteImplementation()
-    } else {
-      (implementation as? () -> Void)?()
-    }
-  }
-
-  public func `myFunc`() -> Mockingbird.Mockable<Mockingbird.MethodDeclaration, () -> Void, Void> {
-    let invocation: Mockingbird.Invocation = Mockingbird.Invocation(selectorName: "`myFunc`() -> Void", arguments: [])
-    return Mockingbird.Mockable<Mockingbird.MethodDeclaration, () -> Void, Void>(mock: self, invocation: invocation)
+  fileprivate init(sourceLocation: Mockingbird.SourceLocation) {
+    Mockingbird.checkVersion(for: self)
+    self.sourceLocation = sourceLocation
   }
 }
 
-/// Create a source-attributed `MyFramework2.ViewModelView2` class mock metatype.
-public func mock(file: StaticString = #file, line: UInt = #line, _ type: MyFramework2.ViewModelView2.Protocol) -> ViewModelView2Mock.InitializerProxy.Type {
-  return ViewModelView2Mock.InitializerProxy.self
+/// Create a source-attributed `MyFramework2.ViewModelView2` concrete protocol mock instance.
+public func mock(file: StaticString = #file, line: UInt = #line, _ type: MyFramework2.ViewModelView2.Protocol) -> ViewModelView2Mock {
+  return ViewModelView2Mock(sourceLocation: SourceLocation(file, line))
 }

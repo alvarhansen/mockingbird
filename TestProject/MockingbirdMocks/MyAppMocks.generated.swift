@@ -9,7 +9,6 @@
 @testable import Mockingbird
 @testable import MyApp
 import Foundation
-import MyFramework
 import Swift
 import UIKit
 
