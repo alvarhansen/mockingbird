@@ -175,13 +175,7 @@ class Generator {
       
       // Need to parse the Xcode project for the full `PBXTarget` object.
       let xcodeproj = try getXcodeProj()
-      let targets = xcodeproj.pbxproj.targets(named: targetName).filter({ target in
-        guard target.productType?.isTestBundle != true else {
-          logWarning("Cannot generate mocks for \(targetName.singleQuoted) because it is a unit test target")
-          return false
-        }
-        return true
-      })
+      let targets = xcodeproj.pbxproj.targets(named: targetName)
       if targets.count > 1 {
         logWarning("Found multiple input targets named \(targetName.singleQuoted), using the first one")
       }
