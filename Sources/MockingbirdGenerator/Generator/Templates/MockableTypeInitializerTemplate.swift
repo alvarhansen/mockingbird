@@ -109,10 +109,12 @@ struct MockableTypeInitializerTemplate: Template {
     
     let allGenericTypes = genericTypeConstraints.isEmpty ? "" :
       "<\(genericTypeConstraints.joined(separator: ", "))>"
+
+    let accessLevel = mockableTypeTemplate.mockableType.accessLevel == .public ? "public" : "internal"
     
     return """
     \(returnTypeDescription)
-    public func mock\(allGenericTypes)(_ type: \(metatype), file: StaticString = #file, line: UInt = #line) -> \(returnType) {
+    \(accessLevel) func mock\(allGenericTypes)(_ type: \(metatype), file: StaticString = #file, line: UInt = #line) -> \(returnType) {
       \(returnStatement)
     }
     """

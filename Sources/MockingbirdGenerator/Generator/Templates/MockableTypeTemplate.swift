@@ -54,11 +54,12 @@ class MockableTypeTemplate: Template {
       "\(allInheritedTypes)\(allGenericConstraints)"
     let rawBody = renderBody()
     let body = rawBody.isEmpty ? "" : "\n\n\(rawBody)"
+    let accessLevel = mockableType.accessLevel == .public ? "public" : "internal"
     
     return """
     // MARK: - Mocked \(mockableType.name)
     \(header)
-    public final class \(mockableType.name)Mock\(allSpecializedGenericTypes): \(inheritance) {
+    \(accessLevel) final class \(mockableType.name)Mock\(allSpecializedGenericTypes): \(inheritance) {
     \(staticMockingContext)
       public let mockingContext = Mockingbird.MockingContext()
       public let stubbingContext = Mockingbird.StubbingContext()
