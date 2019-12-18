@@ -211,7 +211,7 @@ enum AccessLevel: String, CustomStringConvertible {
     switch self {
     case .open: return true
     case .public: return true // Could inherit members from externally defined types.
-    case .internal: return withinSameModule
+    case .internal: return true
     case .fileprivate, .private: return false
     }
   }
@@ -220,7 +220,7 @@ enum AccessLevel: String, CustomStringConvertible {
     switch self {
     case .open: return true
     case .public: return context == .protocol || withinSameModule
-    case .internal: return withinSameModule
+    case .internal: return true
     case .fileprivate, .private: return false
     }
   }
