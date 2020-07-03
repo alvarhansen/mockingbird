@@ -69,7 +69,7 @@ class MethodTemplate: Template {
     return """
       // MARK: Mocked \(fullNameForMocking)
     \(attributes)
-      public \(overridableModifiers)func \(uniqueDeclaration) {
+      \(accessLevel) \(overridableModifiers)func \(uniqueDeclaration) {
         let invocation: Mockingbird.Invocation = Mockingbird.Invocation(selectorName: "\(uniqueDeclaration)", arguments: [\(mockArgumentMatchers)], returnType: Swift.ObjectIdentifier((\(unwrappedReturnTypeName)).self))
     \(stubbedImplementationCall())
       }
@@ -100,7 +100,7 @@ class MethodTemplate: Template {
                                 returnTypeName].joined(separator: ", ")
     
     mockableMethods.append("""
-    \(attributes)  public \(regularModifiers)func \(fullNameForMatching) -> Mockingbird.Mockable<\(mockableGenericTypes)>\(genericConstraints) {
+    \(attributes)  \(accessLevel) \(regularModifiers)func \(fullNameForMatching) -> Mockingbird.Mockable<\(mockableGenericTypes)>\(genericConstraints) {
     \(matchableInvocation)
         return Mockingbird.Mockable<\(mockableGenericTypes)>(mock: \(mockObject), invocation: invocation)
       }
@@ -109,7 +109,7 @@ class MethodTemplate: Template {
     if isVariadicMethod {
       // Allow methods with a variadic parameter to use variadics when stubbing.
       mockableMethods.append("""
-      \(attributes)  public \(regularModifiers)func \(fullNameForMatchingVariadics) -> Mockingbird.Mockable<\(mockableGenericTypes)>\(genericConstraints) {
+      \(attributes)  \(accessLevel) \(regularModifiers)func \(fullNameForMatchingVariadics) -> Mockingbird.Mockable<\(mockableGenericTypes)>\(genericConstraints) {
       \(resolvedVariadicArgumentMatchers)
           let invocation: Mockingbird.Invocation = Mockingbird.Invocation(selectorName: "\(uniqueDeclaration)", arguments: arguments, returnType: Swift.ObjectIdentifier((\(unwrappedReturnTypeName)).self))
           return Mockingbird.Mockable<\(mockableGenericTypes)>(mock: \(mockObject), invocation: invocation)
@@ -421,6 +421,10 @@ class MethodTemplate: Template {
   
   lazy var isVariadicMethod: Bool = {
     return method.parameters.contains(where: { $0.attributes.contains(.variadic) })
+  }()
+
+  lazy var accessLevel: String = {
+    return method.accessLevel == .public ? "public" : "internal"
   }()
 }
 
